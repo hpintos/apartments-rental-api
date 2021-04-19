@@ -1,0 +1,15 @@
+GET http://localhost:3000/
+
+###
+POST http://localhost:3000/apartments/
+Content-Type: application/json
+
+{
+    "name": "Flat in Joan Guell street, Sants",
+    "description": "Now available! Reformed. Sants. 80 square mts. Contact us",
+    "area": 80,
+    "price": 910,
+    "rooms": 2
+}
+###
+GET http://localhost:3000/apartments/607b89fcad2b7ed51b9b1a3b
