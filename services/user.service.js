@@ -11,12 +11,12 @@ async function authenticate({ email, password }) {
             { sub: user.id, email: user.email, role: user.role },
             process.env.SECRET
         );
-        return token;
-        // const { password, ...userWithoutPassword } = user;
-        // return {
-        //     ...userWithoutPassword,
-        //     token,
-        // };
+        return {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            token,
+        };
     }
 }
 
@@ -33,14 +33,13 @@ async function save({ email, password, passwordConfirm, role }) {
         });
         return await newUser.save();
     } catch (err) {
-        console.log(err);
         throw Error('Unable to save user. ' + err.message);
     }
 }
 
 async function getAll() {
     try {
-        return await User.find({});
+        return await User.find({}, 'email role');
     } catch (err) {
         throw Error('Unable to get all users');
     }
@@ -51,7 +50,7 @@ async function getById(id) {
         const user = await User.findById(id);
         return user;
     } catch (err) {
-        throw Error({ message: 'Unable to get an user. ' + err });
+        throw Error('Unable to get an user. ' + err);
     }
 }
 

@@ -1,14 +1,18 @@
 const Apartment = require('../models/apartment.model');
 const Role = require('../utils/roles');
 
-const getAll = async (role) => {
+const getAll = async (role, filters) => {
     try {
-        const condition = role === Role.Client ? { rented: false } : {};
+        const { size, price, rooms } = filters;
+        let condition = role === Role.Client ? { rented: false, ...filters } : { ...filters };
+        if (size && !isNaN(size)) condition = { ...condition, size: { $gte: size } };
+        if (price && !isNaN(price)) condition = { ...condition, price: { $lte: price } };
+        if (rooms && !isNaN(rooms)) condition = { ...condition, rooms: { $gte: rooms } };
         const result = await Apartment.find(condition);
         return result;
     } catch (err) {
         console.error(err.message);
-        throw Error({ error: 'Unable to get all apartments' });
+        throw Error(err.message);
     }
 };
 
@@ -17,7 +21,7 @@ const getById = async (id) => {
         return await Apartment.findById(id);
     } catch (err) {
         console.error(err.message);
-        throw Error({ error: 'Unable to get an apartment' });
+        throw Error(err.message);
     }
 };
 
@@ -34,7 +38,7 @@ const save = async ({ name, description, area, price, rooms, realtorId }) => {
         return await newApartment.save();
     } catch (err) {
         console.error(err.message);
-        throw Error({ error: 'Unable to save: ' + err.message });
+        throw Error(err.message);
     }
 };
 
@@ -51,7 +55,7 @@ const update = async (id, { name, description, area, price, rooms, realtorId, re
         });
     } catch (err) {
         console.error(err.message);
-        throw Error({ error: 'Unable to update: ' + err.message });
+        throw Error(err.message);
     }
 };
 
@@ -60,7 +64,7 @@ const remove = async (id) => {
         return await Apartment.findByIdAndDelete(id);
     } catch (err) {
         console.error(err.message);
-        throw Error({ error: 'Unable to delete: ' + err.message });
+        throw Error(err.message);
     }
 };
 

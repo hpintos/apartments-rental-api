@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const logger = require('morgan');
-const port = process.env.port || 3000;
+const port = process.env.port || 5000;
 
 // Open database connection
 require('./config/db-connection');
